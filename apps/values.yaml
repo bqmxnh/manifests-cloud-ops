@@ -1,0 +1,8 @@
+repoURL: https://github.com/bqmxnh/manifests-cloud-ops.git
+targetRevision: main
+
+api:
+  path: values/api
+
+mlflow:
+  path: values/mlflow
