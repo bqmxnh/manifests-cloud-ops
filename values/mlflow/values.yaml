@@ -1,6 +1,6 @@
 image:
   repository: bqmxnh/mlflow
-  tag: pg
+  tag: "20251124220252"
   pullPolicy: IfNotPresent
 
 service:
