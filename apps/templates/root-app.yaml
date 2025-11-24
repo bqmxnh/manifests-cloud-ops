@@ -80,3 +80,52 @@ spec:
   syncOptions:
     - CreateNamespace=true
 
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ids-argo-workflows
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-workflows
+    targetRevision: 0.33.6    
+    helm:
+      releaseName: argo-workflows
+      values: |
+        server:
+          enabled: true
+          ingress:
+            enabled: true
+            ingressClassName: alb
+            hosts:
+              - "workflows.qmuit.id.vn"
+            paths:
+              - /
+            annotations:
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+              alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+
+
+        controller:
+          workflowNamespaces:
+            - default
+            - argo
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+  syncOptions:
+    - CreateNamespace=true
+
+

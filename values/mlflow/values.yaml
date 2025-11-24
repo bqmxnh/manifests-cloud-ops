@@ -12,12 +12,17 @@ ingress:
   className: alb
   host: "mlflow.qmuit.id.vn"
   path: "/"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+
 
 env:
   BACKEND_STORE_URI: "postgresql+psycopg2://mlflow:mlflow123@ids-mlflow-postgres-postgresql.mlflow.svc.cluster.local:5432/mlflow"
   ARTIFACT_ROOT: "s3://arf-ids-model-bucket/mlflow-artifacts"
   AWS_DEFAULT_REGION: "us-east-1"
-  MLFLOW_S3_IGNORE_TLS: "true"
+  MLFLOW_S3_IGNORE_TLS: "false"
 
 resources:
   requests:
