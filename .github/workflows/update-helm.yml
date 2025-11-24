@@ -7,6 +7,10 @@ on:
         description: "New Docker image tag"
         required: true
         type: string
+      service:
+        description: "Service to update (api | mlflow)"
+        required: true
+        type: string
 
   repository_dispatch:
     types: [update-helm]
@@ -21,25 +25,43 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Get image tag from event
-        id: get_tag
+      - name: Get service + image tag from event
+        id: vars
         run: |
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             echo "tag=${{ github.event.client_payload.image_tag }}" >> $GITHUB_OUTPUT
+            echo "service=${{ github.event.client_payload.service }}" >> $GITHUB_OUTPUT
           else
             echo "tag=${{ inputs.image_tag }}" >> $GITHUB_OUTPUT
+            echo "service=${{ inputs.service }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Update Helm values with new image tag
         run: |
-          sed -i 's|tag:.*|tag: "'"${{ steps.get_tag.outputs.tag }}"'"|g' values/api/values.yaml
+          SERVICE="${{ steps.vars.outputs.service }}"
+          TAG="${{ steps.vars.outputs.tag }}"
+
+          echo "Incoming request: service=$SERVICE, tag=$TAG"
+
+          if [ "$SERVICE" = "api" ]; then
+            echo "Updating API image..."
+            sed -i "s|tag:.*|tag: \"$TAG\"|g" values/api/values.yaml
+            git add values/api/values.yaml
+          fi
+
+          if [ "$SERVICE" = "mlflow" ]; then
+            echo "Updating MLflow image..."
+            sed -i "s|tag:.*|tag: \"$TAG\"|g" values/mlflow/values.yaml
+            git add values/mlflow/values.yaml
+          fi
 
       - name: Commit changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-          git add values/api/values.yaml
-          git commit -m "Update API image tag to ${{ steps.get_tag.outputs.tag }}" || echo "Nothing to commit"
+
+          git commit -m "Update ${{ steps.vars.outputs.service }} image tag to ${{ steps.vars.outputs.tag }}" \
+            || echo "Nothing to commit"
 
       - name: Push changes using PAT
         run: |
