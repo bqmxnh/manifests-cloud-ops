@@ -43,6 +43,7 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: postgresql
@@ -58,12 +59,6 @@ spec:
               database: mlflow
 
         primary:
-          image:
-            registry: docker.io
-            repository: bitnami/postgresql
-            tag: "17.0.0-debian-12-r1"
-            pullPolicy: IfNotPresent
-
           persistence:
             enabled: true
             size: 10Gi
