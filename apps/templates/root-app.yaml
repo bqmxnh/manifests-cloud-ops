@@ -59,8 +59,10 @@ spec:
 
         primary:
           image:
-            repository: docker.io/bitnami/postgresql
-            tag: "17.0.0-debian-12-r0"
+            registry: docker.io
+            repository: bitnami/postgresql
+            tag: "17.0.0-debian-12-r1"
+            pullPolicy: IfNotPresent
 
           persistence:
             enabled: true
@@ -87,7 +89,6 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -96,7 +97,6 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-workflows
@@ -138,7 +138,6 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -147,20 +146,16 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   source:
     repoURL: {{ .Values.repoURL }}
     targetRevision: {{ .Values.targetRevision }}
     path: values/storageclass
-
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
   syncOptions:
     - ApplyOutOfSyncOnly=true
