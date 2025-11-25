@@ -43,8 +43,6 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
-  # Chart PostgreSQL cần namespace được tạo trước
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: postgresql
@@ -63,6 +61,14 @@ spec:
           persistence:
             enabled: true
             size: 10Gi
+            storageClass: gp3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
 
   destination:
     server: https://kubernetes.default.svc
@@ -74,7 +80,8 @@ spec:
       selfHeal: true
 
   syncOptions:
-    - ApplyOutOfSyncOnly=true
+    - ApplyOutOfSyncOnly
+    - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -105,7 +112,8 @@ spec:
             hosts:
               - workflows.qmuit.id.vn
             paths:
-              - /
+              - path: /
+                pathType: Prefix
 
         controller:
           workflowNamespaces:
@@ -122,4 +130,5 @@ spec:
       selfHeal: true
 
   syncOptions:
-    - ApplyOutOfSyncOnly=true
+    - ApplyOutOfSyncOnly
+    - CreateNamespace=true
