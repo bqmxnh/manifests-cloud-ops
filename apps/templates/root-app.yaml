@@ -93,6 +93,8 @@ spec:
       values: |
         server:
           enabled: true
+          authMode: server
+          insecure: true
           ingress:
             enabled: true
             ingressClassName: alb
