@@ -5,16 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   source:
     repoURL: {{ .Values.repoURL }}
     targetRevision: {{ .Values.targetRevision }}
     path: {{ .Values.api.path }}
-
   destination:
     server: https://kubernetes.default.svc
     namespace: default
-
   syncPolicy:
     automated:
       prune: true
@@ -27,21 +24,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   source:
     repoURL: {{ .Values.repoURL }}
     targetRevision: {{ .Values.targetRevision }}
     path: {{ .Values.mlflow.path }}
-
   destination:
     server: https://kubernetes.default.svc
     namespace: default
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -51,6 +44,7 @@ metadata:
 spec:
   project: default
 
+  # Chart PostgreSQL cần namespace được tạo trước
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: postgresql
@@ -64,6 +58,7 @@ spec:
               username: mlflow
               password: mlflow123
               database: mlflow
+
         primary:
           persistence:
             enabled: true
@@ -77,9 +72,9 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  syncOptions:
-    - CreateNamespace=true
 
+  syncOptions:
+    - ApplyOutOfSyncOnly=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -92,7 +87,7 @@ spec:
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-workflows
-    targetRevision: 0.45.28    
+    targetRevision: 0.45.28
     helm:
       releaseName: argo-workflows
       values: |
@@ -101,17 +96,14 @@ spec:
           ingress:
             enabled: true
             ingressClassName: alb
-            hosts:
-              - "workflows.qmuit.id.vn"
-            paths:
-              - path: /
-                pathType: Prefix
-
             annotations:
               alb.ingress.kubernetes.io/scheme: internet-facing
               alb.ingress.kubernetes.io/target-type: ip
               alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
-
+            hosts:
+              - workflows.qmuit.id.vn
+            paths:
+              - /
 
         controller:
           workflowNamespaces:
@@ -128,6 +120,4 @@ spec:
       selfHeal: true
 
   syncOptions:
-    - CreateNamespace=true
-
-
+    - ApplyOutOfSyncOnly=true
