@@ -80,7 +80,7 @@ spec:
       selfHeal: true
 
   syncOptions:
-    - ApplyOutOfSyncOnly
+    - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -130,5 +130,32 @@ spec:
       selfHeal: true
 
   syncOptions:
-    - ApplyOutOfSyncOnly
+    - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ids-storageclass
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: {{ .Values.targetRevision }}
+    path: values/storageclass
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+  syncOptions:
+    - ApplyOutOfSyncOnly=true
+
