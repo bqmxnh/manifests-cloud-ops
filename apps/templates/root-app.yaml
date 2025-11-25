@@ -43,7 +43,6 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: postgresql
@@ -84,6 +83,7 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
+
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
