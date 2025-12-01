@@ -140,10 +140,11 @@ spec:
               alb.ingress.kubernetes.io/backend-protocol: HTTP
 
             hosts:
-              - host: workflows.qmuit.id.vn
-                paths:
-                  - path: /
-                    pathType: Prefix
+              - workflows.qmuit.id.vn
+
+            paths:
+              - /
+
 
         controller:
           workflowNamespaces:
