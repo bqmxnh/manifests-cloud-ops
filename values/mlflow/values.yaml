@@ -1,6 +1,6 @@
 image:
-  repository: bqmxnh/mlflow
-  tag: "20251124220252"
+  repository: mlflow/mlflow
+  tag: "2.14.1"
   pullPolicy: IfNotPresent
 
 service:
