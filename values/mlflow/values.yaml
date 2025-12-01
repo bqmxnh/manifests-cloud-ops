@@ -1,6 +1,6 @@
 image:
   repository: mlflow/mlflow
-  tag: "2.13.0"
+  tag: "latest"
   pullPolicy: IfNotPresent
 
 service:
