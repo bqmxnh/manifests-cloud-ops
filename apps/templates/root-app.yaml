@@ -1,3 +1,6 @@
+# =====================================================================================
+# IDS API
+# =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -16,7 +19,12 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
 ---
+
+# =====================================================================================
+# IDS MLFLOW (MLflow UI + API)
+# =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -30,12 +38,20 @@ spec:
     path: {{ .Values.mlflow.path }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: mlflow      # <<< sửa namespace để cùng Postgres
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+  syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - CreateNamespace=true
+
 ---
+
+# =====================================================================================
+# IDS MLFLOW POSTGRES (Bitnami PostgreSQL)
+# =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -60,7 +76,7 @@ spec:
         primary:
           image:
             repository: docker.io/bitnami/postgresql
-            tag: 17.2.0-debian-12-r3
+            tag: 15.5.0-debian-11-r0     # <<< phiên bản ổn định, tương thích với chart
             pullPolicy: IfNotPresent
 
           persistence:
@@ -78,7 +94,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: mlflow
+    namespace: mlflow        # <<< chạy đúng namespace với MLflow
 
   syncPolicy:
     automated:
@@ -88,7 +104,12 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
+
 ---
+
+# =====================================================================================
+# ARGO WORKFLOWS
+# =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -137,7 +158,12 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
+
 ---
+
+# =====================================================================================
+# STORAGECLASS
+# =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
