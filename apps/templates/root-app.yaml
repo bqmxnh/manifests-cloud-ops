@@ -75,8 +75,9 @@ spec:
 
         primary:
           image:
-            repository: docker.io/bitnami/postgresql
-            tag: 15.5.0-debian-11-r0     # <<< phiên bản ổn định, tương thích với chart
+            registry: docker.io
+            repository: bitnami/postgresql
+            tag: 15.5.0-debian-11-r0
             pullPolicy: IfNotPresent
 
           persistence:
