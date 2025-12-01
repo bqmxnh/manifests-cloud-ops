@@ -69,7 +69,7 @@ spec:
         image:
           registry: docker.io
           repository: bitnami/postgresql
-          tag: lastest
+          tag: latest
           pullPolicy: IfNotPresent
 
         global:
