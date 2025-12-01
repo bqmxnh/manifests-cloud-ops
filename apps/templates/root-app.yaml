@@ -19,6 +19,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
+  syncOptions:
+    - CreateNamespace=true
 
 ---
 
@@ -44,7 +46,6 @@ spec:
       prune: true
       selfHeal: true
   syncOptions:
-    - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
 
 ---
@@ -95,14 +96,11 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: mlflow
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
   syncOptions:
-    - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
 
 ---
@@ -138,13 +136,10 @@ spec:
               alb.ingress.kubernetes.io/target-type: ip
               alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
               alb.ingress.kubernetes.io/backend-protocol: HTTP
-
             hosts:
               - workflows.qmuit.id.vn
-
             paths:
               - /
-
 
         controller:
           workflowNamespaces:
@@ -154,13 +149,11 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argo
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
   syncOptions:
-    - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
 
 ---
@@ -187,4 +180,4 @@ spec:
       prune: true
       selfHeal: true
   syncOptions:
-    - ApplyOutOfSyncOnly=true
+    - CreateNamespace=true
