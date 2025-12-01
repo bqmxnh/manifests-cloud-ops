@@ -136,17 +136,20 @@ spec:
               alb.ingress.kubernetes.io/target-type: ip
               alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
             hosts:
-              - workflows.qmuit.id.vn
-            paths:
-              - path: /
-                pathType: Prefix
+              - host: workflows.qmuit.id.vn
+                paths:
+                  - path: /
+                    pathType: Prefix
+
         controller:
           workflowNamespaces:
             - default
             - argo
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argo
+
   syncPolicy:
     automated:
       prune: true
@@ -154,6 +157,7 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
+
 
 ---
 
