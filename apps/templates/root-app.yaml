@@ -128,6 +128,7 @@ spec:
           enabled: true
           authMode: server
           insecure: true
+          secure: false
           ingress:
             enabled: true
             ingressClassName: alb
@@ -135,11 +136,12 @@ spec:
               alb.ingress.kubernetes.io/scheme: internet-facing
               alb.ingress.kubernetes.io/target-type: ip
               alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+              alb.ingress.kubernetes.io/backend-protocol: HTTP
             hosts:
-              - host: workflows.qmuit.id.vn
-                paths:
-                  - path: /
-                    pathType: Prefix
+              - workflows.qmuit.id.vn
+            paths:
+              - path: /
+                pathType: Prefix
 
         controller:
           workflowNamespaces:
