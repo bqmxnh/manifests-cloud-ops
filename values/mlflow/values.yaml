@@ -1,11 +1,11 @@
 image:
-  repository: bqmxnh/mlflow
-  tag: "20251124220252"
+  repository: mlflow/mlflow
+  tag: "2.13.0"
   pullPolicy: IfNotPresent
 
 service:
-  port: 80          # Service port
-  targetPort: 5000  # MLflow listens on 5000
+  port: 80
+  targetPort: 5000
 
 ingress:
   enabled: true
@@ -16,7 +16,6 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
-
 
 env:
   BACKEND_STORE_URI: "postgresql+psycopg2://mlflow:mlflow123@ids-mlflow-postgres-postgresql.mlflow.svc.cluster.local:5432/mlflow"
