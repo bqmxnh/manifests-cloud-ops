@@ -66,6 +66,12 @@ spec:
     helm:
       releaseName: ids-mlflow-postgres
       values: |
+        image:
+          registry: docker.io
+          repository: bitnami/postgresql
+          tag: 15.5.0-debian-11-r0
+          pullPolicy: IfNotPresent
+
         global:
           postgresql:
             auth:
@@ -74,12 +80,6 @@ spec:
               database: mlflow
 
         primary:
-          image:
-            registry: docker.io
-            repository: bitnami/postgresql
-            tag: 15.5.0-debian-11-r0
-            pullPolicy: IfNotPresent
-
           persistence:
             enabled: true
             size: 10Gi
@@ -93,18 +93,19 @@ spec:
               cpu: 200m
               memory: 256Mi
 
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: mlflow        # <<< chạy đúng namespace với MLflow
 
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: mlflow       
 
-  syncOptions:
-    - ApplyOutOfSyncOnly=true
-    - CreateNamespace=true
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+      syncOptions:
+        - ApplyOutOfSyncOnly=true
+        - CreateNamespace=true
 
 ---
 
