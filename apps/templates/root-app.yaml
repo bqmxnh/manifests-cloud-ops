@@ -58,6 +58,11 @@ spec:
               database: mlflow
 
         primary:
+          image:
+            repository: docker.io/bitnami/postgresql
+            tag: 17.2.0-debian-12-r3
+            pullPolicy: IfNotPresent
+
           persistence:
             enabled: true
             size: 10Gi
