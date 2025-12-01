@@ -23,7 +23,7 @@ spec:
 ---
 
 # =====================================================================================
-# IDS MLFLOW (MLflow UI + API)
+# IDS MLFLOW UI/API
 # =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -38,7 +38,7 @@ spec:
     path: {{ .Values.mlflow.path }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: mlflow      # <<< sửa namespace để cùng Postgres
+    namespace: mlflow
   syncPolicy:
     automated:
       prune: true
@@ -50,7 +50,7 @@ spec:
 ---
 
 # =====================================================================================
-# IDS MLFLOW POSTGRES (Bitnami PostgreSQL)
+# IDS MLFLOW POSTGRES
 # =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -84,7 +84,6 @@ spec:
             enabled: true
             size: 10Gi
             storageClass: gp3
-
           resources:
             requests:
               cpu: 100m
@@ -93,19 +92,18 @@ spec:
               cpu: 200m
               memory: 256Mi
 
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mlflow
 
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: mlflow       
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-
-      syncOptions:
-        - ApplyOutOfSyncOnly=true
-        - CreateNamespace=true
+  syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - CreateNamespace=true
 
 ---
 
@@ -142,21 +140,17 @@ spec:
             paths:
               - path: /
                 pathType: Prefix
-
         controller:
           workflowNamespaces:
             - default
             - argo
-
   destination:
     server: https://kubernetes.default.svc
     namespace: argo
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
