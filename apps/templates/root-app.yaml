@@ -129,6 +129,7 @@ spec:
           authMode: server
           insecure: true
           secure: false
+
           ingress:
             enabled: true
             ingressClassName: alb
@@ -139,17 +140,10 @@ spec:
               alb.ingress.kubernetes.io/backend-protocol: HTTP
 
             hosts:
-              - workflows.qmuit.id.vn
-
-            extraPaths:
-              - path: /
-                pathType: Prefix
-                backend:
-                  service:
-                    name: argo-workflows-server
-                    port:
-                      number: 2746
-
+              - host: workflows.qmuit.id.vn
+                paths:
+                  - path: /
+                    pathType: Prefix
 
         controller:
           workflowNamespaces:
@@ -167,7 +161,6 @@ spec:
   syncOptions:
     - ApplyOutOfSyncOnly=true
     - CreateNamespace=true
-
 
 ---
 
