@@ -10,11 +10,9 @@ service:
 ingress:
   enabled: true
   className: alb
-  hosts:
-    - host: mlflow.qmuit.id.vn
-      paths:
-        - path: /
-          pathType: Prefix
+  host: "mlflow.qmuit.id.vn"
+  path: /
+  pathType: Prefix
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
