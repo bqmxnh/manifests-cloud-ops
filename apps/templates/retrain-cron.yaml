@@ -4,7 +4,7 @@ metadata:
   name: arf-ids-incremental-retrain
   namespace: argo
 spec:
-  schedule: "0 3 * * *"
+  schedule: "{{ .Values.argoWorkflows.retrain.schedule }}"
   concurrencyPolicy: Forbid
 
   workflowSpec:
@@ -13,24 +13,21 @@ spec:
     templates:
       - name: retrain
         container:
-          image: docker.io/bqmxnh/cloud-ops-retrain:{{SHA}}
+          image: "{{ .Values.argoWorkflows.retrain.image }}"
           imagePullPolicy: Always
           command: ["python", "retrain_incremental.py"]
 
           env:
             - name: MLFLOW_TRACKING_URI
               value: "https://mlflow.qmuit.id.vn"
-
             - name: MODEL_NAME
               value: "ARF Baseline Model"
-
             - name: S3_BUCKET
               value: "qmuit-ids-training-data-store"
-
             - name: AWS_DEFAULT_REGION
               value: "us-east-1"
 
         resources:
           limits:
-            cpu: "2"
-            memory: "4Gi"
+            cpu: "{{ .Values.argoWorkflows.retrain.resources.cpu }}"
+            memory: "{{ .Values.argoWorkflows.retrain.resources.memory }}"
