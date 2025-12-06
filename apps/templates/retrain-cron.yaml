@@ -13,7 +13,7 @@ spec:
     templates:
       - name: retrain
         container:
-          image: docker.io/bqmxnh/cloud-ops-retrain:latest
+          image: docker.io/bqmxnh/cloud-ops-retrain:{{SHA}}
           imagePullPolicy: Always
           command: ["python", "retrain_incremental.py"]
 
