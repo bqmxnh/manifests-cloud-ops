@@ -1,7 +1,7 @@
 retrain:
   image:
     repository: bqmxnh/cloud-ops-retrain
-    tag: "latest"
+    tag: "20251206171205"
     pullPolicy: Always
 
   schedule: "0 3 * * *"
