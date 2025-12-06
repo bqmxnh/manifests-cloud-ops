@@ -1,0 +1,15 @@
+retrain:
+  schedule: "0 */6 * * *"     # Cron chạy mỗi 6 tiếng (ví dụ)
+  image:
+    repository: docker.io/bqmxnh/cloud-ops-retrain
+    tag: latest
+    pullPolicy: Always
+
+  resources:
+    cpu: "2"
+    memory: "4Gi"
+
+  mlflowUrl: "https://mlflow.qmuit.id.vn"
+  modelName: "ARF Baseline Model"
+  s3Bucket: "qmuit-training-data-store"
+  region: "us-east-1"

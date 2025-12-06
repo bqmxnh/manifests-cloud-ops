@@ -5,7 +5,10 @@ metadata:
   namespace: argo
 spec:
   schedule: "{{ .Values.retrain.schedule }}"
-  concurrencyPolicy: Forbid
+  timezone: "Asia/Ho_Chi_Minh"
+  concurrencyPolicy: "Forbid"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
 
   workflowSpec:
     entrypoint: retrain
@@ -19,16 +22,16 @@ spec:
 
           env:
             - name: MLFLOW_TRACKING_URI
-              value: "https://mlflow.qmuit.id.vn"
+              value: "{{ .Values.retrain.mlflowUrl }}"
 
             - name: MODEL_NAME
-              value: "ARF Baseline Model"
+              value: "{{ .Values.retrain.modelName }}"
 
             - name: S3_BUCKET
-              value: "qmuit-ids-training-data-store"
+              value: "{{ .Values.retrain.s3Bucket }}"
 
             - name: AWS_DEFAULT_REGION
-              value: "us-east-1"
+              value: "{{ .Values.retrain.region }}"
 
         resources:
           limits:

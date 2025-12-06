@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: arf-retrain-test-
+  namespace: argo
+spec:
+  entrypoint: retrain
+
+  templates:
+    - name: retrain
+      container:
+        image: "{{ .Values.retrain.image.repository }}:{{ .Values.retrain.image.tag }}"
+        imagePullPolicy: {{ .Values.retrain.image.pullPolicy }}
+        command: ["python", "retrain_incremental.py"]
+
+        env:
+          - name: MLFLOW_TRACKING_URI
+            value: "{{ .Values.retrain.mlflowUrl }}"
+
+          - name: MODEL_NAME
+            value: "{{ .Values.retrain.modelName }}"
+
+          - name: S3_BUCKET
+            value: "{{ .Values.retrain.s3Bucket }}"
+
+          - name: AWS_DEFAULT_REGION
+            value: "{{ .Values.retrain.region }}"
+
+      resources:
+        limits:
+          cpu: "{{ .Values.retrain.resources.cpu }}"
+          memory: "{{ .Values.retrain.resources.memory }}"

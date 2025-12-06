@@ -7,14 +7,8 @@ api:
 mlflow:
   path: values/mlflow
 
-retrain:
-  image:
-    repository: bqmxnh/cloud-ops-retrain
-    tag: "20251206193858"
-    pullPolicy: Always
+storageclass:
+  path: values/storageclass
 
-  schedule: "0 3 * * *"
-
-  resources:
-    cpu: "2"
-    memory: "4Gi"
+argoWorkflows:
+  path: values/argo-workflows

@@ -56,10 +56,11 @@ jobs:
           fi
 
           if [ "$SERVICE" = "retrain" ]; then
-            echo "Updating retrain image tag inside apps/values.yaml ..."
-            sed -i "s|tag:.*|tag: \"$TAG\"|g" apps/values.yaml
-            git add apps/values.yaml
+            echo "Updating retrain image..."
+            sed -i "s|tag:.*|tag: \"$TAG\"|g" values/argo-workflows/values.yaml
+            git add values/argo-workflows/values.yaml
           fi
+
 
 
 
