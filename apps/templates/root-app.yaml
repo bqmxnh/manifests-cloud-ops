@@ -210,3 +210,35 @@ spec:
         - /status
         - /metadata/annotations
         - /metadata/managedFields
+
+---
+# =====================================================================================
+# IDS RETRAIN WORKFLOWS (CronWorkflow)
+# =====================================================================================
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ids-retrain
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.repoURL }}
+    targetRevision: {{ .Values.targetRevision }}
+    path: values/argo-workflows     
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo                 
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  syncOptions:
+    - CreateNamespace=true
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: CronWorkflow
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/managedFields
