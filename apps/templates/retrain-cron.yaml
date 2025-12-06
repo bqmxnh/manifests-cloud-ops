@@ -14,7 +14,7 @@ spec:
       - name: retrain
         container:
           image: "{{ .Values.retrain.image.repository }}:{{ .Values.retrain.image.tag }}"
-          imagePullPolicy: "{{ .Values.retrain.image.pullPolicy }}"
+          imagePullPolicy: {{ .Values.retrain.image.pullPolicy }}
           command: ["python", "retrain_incremental.py"]
 
           env:
