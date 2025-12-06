@@ -7,10 +7,7 @@ api:
 mlflow:
   path: values/mlflow
 
-
-
-
-  retrain:
+retrain:
   image:
     repository: bqmxnh/cloud-ops-retrain
     tag: "latest"
