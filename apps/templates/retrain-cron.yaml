@@ -21,7 +21,7 @@ spec:
               value: "https://mlflow.qmuit.id.vn"
 
             - name: MODEL_NAME
-              value: "ARF_IDS_MODEL"
+              value: "ARF Baseline Model"
 
             - name: S3_BUCKET
               value: "qmuit-ids-training-data-store"
