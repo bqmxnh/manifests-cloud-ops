@@ -14,6 +14,7 @@ spec:
       - name: retrain
         container:
           image: docker.io/bqmxnh/cloud-ops-retrain:latest
+          imagePullPolicy: Always
           command: ["python", "retrain_incremental.py"]
 
           env:
