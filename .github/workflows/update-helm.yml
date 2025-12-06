@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       service:
-        description: "Service to update (api | mlflow)"
+        description: "Service to update (api | mlflow | retrain)"
         required: true
         type: string
 
@@ -53,6 +53,17 @@ jobs:
             echo "Updating MLflow image..."
             sed -i "s|tag:.*|tag: \"$TAG\"|g" values/mlflow/values.yaml
             git add values/mlflow/values.yaml
+          fi
+
+          # === UPDATED RETRAIN SECTION (SAFE) ===
+          if [ "$SERVICE" = "retrain" ]; then
+            echo "Updating Retrain CronWorkflow image..."
+
+            # Chỉ thay đúng dòng chứa `image:` ngay trong file retrain.yaml
+            sed -i "s|image: .*|image: \"docker.io/bqmxnh/cloud-ops-retrain:$TAG\"|g" \
+                values/argo-workflows/retrain.yaml
+
+            git add values/argo-workflows/retrain.yaml
           fi
 
       - name: Commit changes
