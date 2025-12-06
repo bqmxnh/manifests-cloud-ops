@@ -22,7 +22,7 @@ ingress:
 
 env:
   BACKEND_STORE_URI: "postgresql+psycopg2://mlflow:mlflow123@ids-mlflow-postgres-postgresql.mlflow.svc.cluster.local:5432/mlflow"
-  ARTIFACT_ROOT: "s3://mlflow-artifact-store/mlflow-artifacts"
+  ARTIFACT_ROOT: "s3://mlflow-qmuit-artifacts-store/mlflow-artifacts"
   AWS_DEFAULT_REGION: "us-east-1"
   MLFLOW_S3_IGNORE_TLS: "false"
 
