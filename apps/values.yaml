@@ -10,7 +10,7 @@ mlflow:
 retrain:
   image:
     repository: bqmxnh/cloud-ops-retrain
-    tag: "20251206173723"
+    tag: "20251206173944"
     pullPolicy: Always
 
   schedule: "0 3 * * *"
