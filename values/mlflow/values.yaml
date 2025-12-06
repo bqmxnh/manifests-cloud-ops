@@ -4,7 +4,7 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  port: 80          # Service port
+  port: 5000          # Service port
   targetPort: 5000  # MLflow listens on 5000
 
 ingress:
