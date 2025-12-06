@@ -21,9 +21,15 @@ spec:
       selfHeal: true
   syncOptions:
     - CreateNamespace=true
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/managedFields
 
 ---
-
 # =====================================================================================
 # IDS MLFLOW UI/API
 # =====================================================================================
@@ -47,9 +53,15 @@ spec:
       selfHeal: true
   syncOptions:
     - CreateNamespace=true
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/managedFields
 
 ---
-
 # =====================================================================================
 # IDS MLFLOW POSTGRES
 # =====================================================================================
@@ -92,7 +104,6 @@ spec:
             limits:
               cpu: 200m
               memory: 256Mi
-
   destination:
     server: https://kubernetes.default.svc
     namespace: mlflow
@@ -102,11 +113,17 @@ spec:
       selfHeal: true
   syncOptions:
     - CreateNamespace=true
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/managedFields
 
 ---
-
 # =====================================================================================
-# ARGO WORKFLOWS
+# IDS ARGO WORKFLOWS
 # =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -145,7 +162,6 @@ spec:
           workflowNamespaces:
             - default
             - argo
-
   destination:
     server: https://kubernetes.default.svc
     namespace: argo
@@ -155,9 +171,15 @@ spec:
       selfHeal: true
   syncOptions:
     - CreateNamespace=true
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/managedFields
 
 ---
-
 # =====================================================================================
 # STORAGECLASS
 # =====================================================================================
@@ -181,3 +203,10 @@ spec:
       selfHeal: true
   syncOptions:
     - CreateNamespace=true
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /metadata/managedFields
