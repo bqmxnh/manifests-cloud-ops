@@ -1,7 +1,6 @@
-argoWorkflows:
-  retrain:
-    schedule: "0 3 * * *"
-    image: "docker.io/bqmxnh/cloud-ops-retrain:latest"
-    resources:
-      cpu: "2"
-      memory: "4Gi"
+retrainCron:
+  schedule: "0 3 * * *"
+  image: "docker.io/bqmxnh/cloud-ops-retrain:latest"
+  resources:
+    cpu: "2"
+    memory: "4Gi"
