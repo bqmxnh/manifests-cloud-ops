@@ -4,8 +4,7 @@ metadata:
   name: arf-ids-incremental-retrain
   namespace: argo
 spec:
-  # lấy từ values.yaml
-  schedule: "{{ .Values.retrainCron.schedule }}"
+  schedule: "{{ .Values.retrain.schedule }}"
   concurrencyPolicy: Forbid
 
   workflowSpec:
@@ -14,8 +13,8 @@ spec:
     templates:
       - name: retrain
         container:
-          image: "{{ .Values.retrainCron.image }}"
-          imagePullPolicy: Always
+          image: "{{ .Values.retrain.image.repository }}:{{ .Values.retrain.image.tag }}"
+          imagePullPolicy: "{{ .Values.retrain.image.pullPolicy }}"
           command: ["python", "retrain_incremental.py"]
 
           env:
@@ -33,5 +32,5 @@ spec:
 
         resources:
           limits:
-            cpu: "{{ .Values.retrainCron.resources.cpu }}"
-            memory: "{{ .Values.retrainCron.resources.memory }}"
+            cpu: "{{ .Values.retrain.resources.cpu }}"
+            memory: "{{ .Values.retrain.resources.memory }}"
