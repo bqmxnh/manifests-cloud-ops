@@ -141,9 +141,6 @@ spec:
     helm:
       releaseName: argo-workflows
       values: |
-        # ========================================================
-        # SERVER CONFIG
-        # ========================================================
         server:
           enabled: true
           authMode: server
@@ -167,9 +164,6 @@ spec:
             paths:
               - /
 
-        # ========================================================
-        # CONTROLLER CONFIG
-        # ========================================================
         controller:
           workflowNamespaces:
             - default
@@ -177,57 +171,53 @@ spec:
 
           serviceAccount:
             create: true
-            name: argo-workflows
+            name: argo-workflows-controller
 
-        # ========================================================
-        # ARTIFACT REPOSITORY (S3)
-        # ========================================================
-        workflow:
-          serviceAccount:
-            create: true
-            name: argo-workflows
+        # ------------------------
+        # ARTIFACT REPOSITORY
+        # ------------------------
+        artifactRepository:
+          s3:
+            bucket: qmuit-training-data-store
+            endpoint: s3.amazonaws.com
+            region: us-east-1
+            insecure: false
+            accessKeySecret:
+              name: argo-s3-secret
+              key: accesskey
+            secretKeySecret:
+              name: argo-s3-secret
+              key: secretkey
 
-          artifactRepository:
-            s3:
-              bucket: qmuit-training-data-store
-              endpoint: s3.amazonaws.com
-              region: us-east-1
-              insecure: false
-              accessKeySecret:
-                name: argo-s3-secret
-                key: accesskey
-              secretKeySecret:
-                name: argo-s3-secret
-                key: secretkey
-
-        # ========================================================
-        # ENABLE WORKFLOW + NODE EVENTS
-        # ========================================================
+        # ------------------------
+        # ENABLE EVENTS
+        # ------------------------
         config:
           workflowEvents:
             enabled: true
           nodeEvents:
             enabled: true
 
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argo
 
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argo
 
-  syncOptions:
-    - CreateNamespace=true
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
 
-  ignoreDifferences:
-    - group: argoproj.io
-      kind: Application
-      jsonPointers:
-        - /status
-        - /metadata/annotations
-        - /metadata/managedFields
+      syncOptions:
+        - CreateNamespace=true
+
+      ignoreDifferences:
+        - group: argoproj.io
+          kind: Application
+          jsonPointers:
+            - /status
+            - /metadata/annotations
+            - /metadata/managedFields
 
 # =====================================================================================
 # STORAGECLASS
