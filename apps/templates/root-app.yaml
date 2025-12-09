@@ -162,15 +162,38 @@ spec:
           workflowNamespaces:
             - default
             - argo
+
+        artifactRepository:
+          s3:
+            bucket: qmuit-training-data-store
+            endpoint: s3.amazonaws.com
+            region: us-east-1
+            insecure: false
+            accessKeySecret:
+              name: argo-s3-secret
+              key: accesskey
+            secretKeySecret:
+              name: argo-s3-secret
+              key: secretkey
+
+        config:
+          workflowEvents:
+            enabled: true
+          nodeEvents:
+            enabled: true
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argo
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
   syncOptions:
     - CreateNamespace=true
+
   ignoreDifferences:
     - group: argoproj.io
       kind: Application
@@ -178,6 +201,7 @@ spec:
         - /status
         - /metadata/annotations
         - /metadata/managedFields
+
 
 ---
 # =====================================================================================
