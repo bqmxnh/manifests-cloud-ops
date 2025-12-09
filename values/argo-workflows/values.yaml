@@ -2,7 +2,7 @@ retrain:
   schedule: "0 */6 * * *"     # Cron chạy mỗi 6 tiếng (ví dụ)
   image:
     repository: docker.io/bqmxnh/cloud-ops-retrain
-    tag: "20251209110823"
+    tag: "20251209111742"
     pullPolicy: Always
 
   resources:
