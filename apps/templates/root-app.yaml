@@ -142,13 +142,17 @@ spec:
       releaseName: argo-workflows
       values: |
         # ========================================================
-        # ARGO SERVER CONFIG
+        # SERVER CONFIG
         # ========================================================
         server:
           enabled: true
           authMode: server
           insecure: true
           secure: false
+
+          serviceAccount:
+            create: true
+            name: argo-workflows-server
 
           ingress:
             enabled: true
@@ -164,17 +168,25 @@ spec:
               - /
 
         # ========================================================
-        # WORKFLOW CONTROLLER CONFIG
+        # CONTROLLER CONFIG
         # ========================================================
         controller:
           workflowNamespaces:
             - default
             - argo
 
+          serviceAccount:
+            create: true
+            name: argo-workflows
+
         # ========================================================
         # ARTIFACT REPOSITORY (S3)
         # ========================================================
         workflow:
+          serviceAccount:
+            create: true
+            name: argo-workflows
+
           artifactRepository:
             s3:
               bucket: qmuit-training-data-store
