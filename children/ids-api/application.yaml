@@ -1,26 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ids-root
+  name: ids-api
   namespace: argocd
 spec:
   project: default
-
   source:
-    repoURL: {{ .Values.repoURL }}
-    targetRevision: {{ .Values.targetRevision }}
-    path: children
-    directory:
-      recurse: true    # QUÉT TẤT CẢ application.yaml trong children/
-
+    repoURL: https://github.com/bqmxnh/manifests-cloud-ops.git
+    targetRevision: main
+    path: values/api
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
-
+    namespace: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
   syncOptions:
     - CreateNamespace=true

@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ids-argo-workflows
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-workflows
+    targetRevision: 0.45.28
+    helm:
+      releaseName: argo-workflows
+      values: |
+        server:
+          enabled: true
+          authMode: server
+          insecure: true
+          secure: false
+
+          ingress:
+            enabled: true
+            ingressClassName: alb
+            annotations:
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+              alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+              alb.ingress.kubernetes.io/backend-protocol: HTTP
+            hosts:
+              - workflows.qmuit.id.vn
+            paths:
+              - /
+
+        controller:
+          workflowNamespaces:
+            - default
+            - argo
+
+        artifactRepository:
+          s3:
+            bucket: qmuit-training-data-store
+            endpoint: s3.amazonaws.com
+            region: us-east-1
+            insecure: false
+            accessKeySecret:
+              name: argo-s3-secret
+              key: accesskey
+            secretKeySecret:
+              name: argo-s3-secret
+              key: secretkey
+
+        config:
+          workflowEvents:
+            enabled: true
+          nodeEvents:
+            enabled: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+  syncOptions:
+    - CreateNamespace=true
