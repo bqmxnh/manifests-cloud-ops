@@ -123,7 +123,7 @@ spec:
 
 ---
 # =====================================================================================
-# IDS ARGO WORKFLOWS
+# IDS ARGO WORKFLOWS (FULL + FIXED)
 # =====================================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -132,13 +132,18 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-workflows
     targetRevision: 0.45.28
+
     helm:
       releaseName: argo-workflows
       values: |
+        # ========================================================
+        # ARGO SERVER CONFIG
+        # ========================================================
         server:
           enabled: true
           authMode: server
@@ -158,19 +163,52 @@ spec:
             paths:
               - /
 
+        # ========================================================
+        # WORKFLOW CONTROLLER CONFIG
+        # ========================================================
         controller:
           workflowNamespaces:
             - default
             - argo
+
+        # ========================================================
+        # ARTIFACT REPOSITORY (S3)
+        # ========================================================
+        workflow:
+          artifactRepository:
+            s3:
+              bucket: qmuit-training-data-store
+              endpoint: s3.amazonaws.com
+              region: us-east-1
+              insecure: false
+              accessKeySecret:
+                name: argo-s3-secret
+                key: accesskey
+              secretKeySecret:
+                name: argo-s3-secret
+                key: secretkey
+
+        # ========================================================
+        # ENABLE WORKFLOW + NODE EVENTS
+        # ========================================================
+        config:
+          workflowEvents:
+            enabled: true
+          nodeEvents:
+            enabled: true
+
   destination:
     server: https://kubernetes.default.svc
     namespace: argo
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
   syncOptions:
     - CreateNamespace=true
+
   ignoreDifferences:
     - group: argoproj.io
       kind: Application
@@ -179,7 +217,6 @@ spec:
         - /metadata/annotations
         - /metadata/managedFields
 
----
 # =====================================================================================
 # STORAGECLASS
 # =====================================================================================
