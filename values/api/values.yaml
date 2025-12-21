@@ -23,7 +23,7 @@ ingress:
   path: /
 
 autoscaling:
-  enabled: true
-  minReplicas: 3
-  maxReplicas: 6
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 60
