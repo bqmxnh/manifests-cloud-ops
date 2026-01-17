@@ -1,6 +1,6 @@
 image:
   repository: bqmxnh/arf-ids-api
-  tag: "20260117151858"
+  tag: "20260117153001"
   pullPolicy: Always
 
 replicaCount: 2
