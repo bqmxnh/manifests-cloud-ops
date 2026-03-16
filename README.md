@@ -1,26 +1,30 @@
-# manifests-cloud-ops
+This repository contains the **Helm charts and Kubernetes manifests** used to deploy application components (such as the API service, MLflow, and related services).
 
-Repository chứa các Helm manifests/Charts để triển khai các ứng dụng (API, mlflow, ...).
+## Purpose
 
-## Mục đích
+This repository stores Helm charts and configuration values to manage Kubernetes manifests, treating **Git as the single source of truth**.
 
-Kho lưu các chart/values để quản lý manifest (git as single source of truth). Workflow GitHub Actions trong `.github/workflows/update-helm.yml` dùng để cập nhật image tag trong `values/api/values.yaml` và push thay đổi trở lại `main`.
+The GitHub Actions workflow located in `.github/workflows/update-helm.yml` is responsible for updating the container image tag in `values/api/values.yaml` and pushing the changes back to the `main` branch.
 
-## Cấu trúc chính
+## Main Structure
 
-- `apps/` — chart tổng (umbrella) và templates của root app.
-- `values/` — các chart con và `values.yaml` của từng service:
-  - `values/api/values.yaml` — file được workflow cập nhật image `tag`.
-  - `values/mlflow/*` — chart cho mlflow
+- `apps/` — umbrella chart and root application templates.
+- `values/` — subcharts and `values.yaml` files for each service:
+  - `values/api/values.yaml` — file where the workflow automatically updates the container image `tag`.
+  - `values/mlflow/*` — Helm chart and configuration for the MLflow service.
 
 ## GitHub Actions: `update-helm.yml`
 
-Tóm tắt hành vi:
-- Trigger:
-  - `workflow_dispatch` (manual) với input `image_tag`.
-  - `repository_dispatch` event với `client_payload.image_tag`.
-- Workflow sẽ:
-  1. Checkout repo (dùng `secrets.PAT_TOKEN`).
-  2. Lấy tag từ input hoặc payload.
-  3. Thay thế `tag:` trong `values/api/values.yaml` bằng tag mới.
-  4. Commit & push thay đổi về `main` bằng cách dùng PAT.
+### Workflow Summary
+
+**Triggers**
+
+- `workflow_dispatch` — manual trigger with input `image_tag`.
+- `repository_dispatch` — triggered via API with `client_payload.image_tag`.
+
+**Workflow steps**
+
+1. Checkout the repository using `secrets.PAT_TOKEN`.
+2. Retrieve the image tag from either the workflow input or the payload.
+3. Replace the `tag:` value in `values/api/values.yaml` with the new image tag.
+4. Commit and push the updated configuration back to the `main` branch using the PAT token.
